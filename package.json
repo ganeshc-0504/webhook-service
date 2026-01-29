@@ -1,0 +1,29 @@
+{
+  "name": "webhook-service",
+  "version": "1.0.0",
+  "description": "Secure webhook receiver service with HMAC signature verification",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ganeshc-0504/webhook-service.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ganeshc-0504/webhook-service/issues"
+  },
+  "homepage": "https://github.com/ganeshc-0504/webhook-service#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
