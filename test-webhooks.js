@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 const BASE_URL = 'http://localhost:3000';
-const SECRET = 'your-secret-key-here-change-in-production';
+const SECRET = 'my_super_secret_123';
 
 function generateSignature(payload) {
     return crypto

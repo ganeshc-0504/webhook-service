@@ -30,9 +30,19 @@ router.post('/provider-x', async (req, res) => {
         eventType = req.headers['x-event-type'];
         const webhookVersion = req.headers['x-webhook-version'] || '1.0';
 
+        // --- DEMO LOG START ---
+        console.log('\n======================================================');
+        console.log(`[WEBHOOK DEMO] Received webhook event: ${eventType}`);
+        console.log('======================================================');
+        // --- DEMO LOG END ---
+
         // Step 2: Verify signature (MANDATORY)
         if (!signature) {
             logger.warn('Missing signature header', { path: req.path });
+
+            console.log('\n======================================================');
+            console.log('[WEBHOOK DEMO] Missing Signature Header');
+            console.log('======================================================');
             return res.status(401).json({ error: 'Missing X-Signature header' });
         }
 
@@ -52,8 +62,16 @@ router.post('/provider-x', async (req, res) => {
                 path: req.path,
                 eventType,
             });
+
+            console.log('\n======================================================');
+            console.log('[WEBHOOK DEMO] Invalid Signature');
+            console.log('======================================================');
             return res.status(401).json({ error: 'Invalid signature' });
         }
+
+        console.log('\n======================================================');
+        console.log(`[WEBHOOK DEMO] Signature verified: ${signature.substring(0, 10)}...`);
+        console.log('======================================================');
 
         // Step 3: Parse JSON (after signature verification)
         let payload;
@@ -64,6 +82,10 @@ router.post('/provider-x', async (req, res) => {
                 path: req.path,
                 error: error.message,
             });
+
+            console.log('\n======================================================');
+            console.log('[WEBHOOK DEMO] Malformed JSON Payload');
+            console.log('======================================================');
             return res.status(400).json({ error: 'Invalid JSON payload' });
         }
 
@@ -80,16 +102,28 @@ router.post('/provider-x', async (req, res) => {
                 eventType,
                 error: validation.error,
             });
+
+            console.log('\n======================================================');
+            console.log(`[WEBHOOK DEMO] Invalid Payload: ${validation.error}`);
+            console.log('======================================================');
             return res.status(400).json({ error: validation.error });
         }
 
         // Step 5: Check event type
         if (!eventType) {
             logger.warn('Missing event type header', { eventId, orderId });
+
+            console.log('\n======================================================');
+            console.log('[WEBHOOK DEMO] Missing Event Type');
+            console.log('======================================================');
             return res.status(400).json({ error: 'Missing X-Event-Type header' });
         }
 
         // Step 6: Process event
+
+        console.log('\n======================================================');
+        console.log(`[WEBHOOK DEMO] Processing event: ${eventType} for order: ${orderId}`);
+        console.log('======================================================');
         const result = await orderService.processEvent(eventType, payload);
 
         // Step 7: Log and respond
@@ -106,6 +140,10 @@ router.post('/provider-x', async (req, res) => {
                 webhookVersion,
             });
 
+
+            console.log('\n======================================================');
+            console.log(`[WEBHOOK DEMO]  Skipped: Unknown event type`);
+            console.log('======================================================');
             return res.status(202).json({
                 message: 'Event accepted but not processed (unknown type)',
                 eventId,
@@ -122,6 +160,10 @@ router.post('/provider-x', async (req, res) => {
             webhookVersion,
         });
 
+
+        console.log('\n======================================================');
+        console.log(`[WEBHOOK DEMO] Webhook processed successfully in ${processingTime}ms`);
+        console.log('======================================================');
         return res.status(200).json({
             message: 'Webhook processed successfully',
             eventId,
@@ -141,6 +183,10 @@ router.post('/provider-x', async (req, res) => {
             processingTime,
         });
 
+
+        console.log('\n======================================================');
+        console.log(`[WEBHOOK DEMO] Processing Failed: ${error.message}`);
+        console.log('======================================================');
         return res.status(500).json({
             error: 'Failed to process webhook',
             eventId,

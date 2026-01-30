@@ -90,6 +90,11 @@ class OrderService {
 
         logger.info('Order created', { orderId, eventId });
 
+        console.log('\n======================================================');
+        console.log(`[WEBHOOK DEMO] Side Effect: Created order ${orderId} in database`);
+        console.log('======================================================');
+
+
         return {
             success: true,
             order,
@@ -124,6 +129,11 @@ class OrderService {
 
         logger.info('Order updated', { orderId, eventId });
 
+        console.log('\n======================================================');
+        console.log(`[WEBHOOK DEMO] Side Effect: Updated order ${orderId} status to '${updatedOrder.status}'`);
+        console.log('======================================================');
+
+
         return {
             success: true,
             order: updatedOrder,
@@ -154,6 +164,11 @@ class OrderService {
         this.orders.set(orderId, cancelledOrder);
 
         logger.info('Order cancelled', { orderId, eventId });
+
+        console.log('\n======================================================');
+        console.log(`[WEBHOOK DEMO] Side Effect: Cancelled order ${orderId}`);
+        console.log('======================================================');
+
 
         return {
             success: true,
